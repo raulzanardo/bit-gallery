@@ -167,7 +167,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           {photos.length} FILE{photos.length !== 1 ? "S" : ""}
         </span>
         <span className="pico-status-item">240×176 PX</span>
-        <span className="pico-status-item">4× ZOOM</span>
         <span className="pico-status-item">PNG</span>
         <span className="pico-status-spacer" />
         <span
@@ -253,7 +252,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             {/* Window footer */}
             <div className="pico-window-footer">
               <span>{selected.name}</span>
-              <span className="kbd">ESC:CLOSE ◀▶:NAVIGATE</span>
+              <span className="kbd">3× ZOOM ESC:CLOSE ◀▶:NAVIGATE</span>
             </div>
           </div>
         </div>

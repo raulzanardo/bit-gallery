@@ -248,8 +248,7 @@ html, body {
 ───────────────────────────────────────────── */
 .pico-grid {
   display: grid;
-  /* each card is 960px wide (4× the 240px sensor width) */
-  grid-template-columns: repeat(auto-fill, minmax(960px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   padding: 2px;
 }
@@ -275,8 +274,6 @@ html, body {
   border: 2px solid var(--p8-dark-grey);
   background: var(--p8-black);
   overflow: hidden;
-  /* sensor is 240×176; photos saved 2× → 480×352.
-     Display at 4× sensor = 960×704 → keep native aspect ratio */
   aspect-ratio: 240 / 176;
   transition: border-color 0.05s;
   width: 100%;
@@ -532,8 +529,8 @@ html, body {
 .pico-photo-viewer {
   flex: 1;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: safe center;
+  justify-content: safe center;
   overflow: auto;
   background: var(--p8-black);
   border: 2px solid var(--p8-dark-grey);
@@ -556,11 +553,9 @@ html, body {
 }
 
 .pico-photo-viewer-img {
-  /* 4× the 240px sensor width = 960px; photos are stored at 2× (480px),
-     so we set a fixed 960px width to get true 4× pixel rendering */
-  width: 960px;
+  /* 3× sensor (240px) = 720px; stored file is 480px (2×), so display at 1.5× stored */
+  width: 720px;
   height: auto;
-  object-fit: none;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   display: block;

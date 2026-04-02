@@ -1,87 +1,106 @@
-# Welcome to React Router!
+# BIT GALLERY
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Retro pixel photo gallery built with React Router 7.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+BIT GALLERY turns your folder of camera exports into a PICO-8 inspired gallery UI with a sharp grid, CRT-like status bars, and a keyboard-friendly lightbox.
 
-## Features
+## Why It Is Cool
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- Pixel-art inspired interface with game-console energy
+- Auto-discovers images from `public/photos`
+- Sorts files by number in filename (newest-style names first)
+- Lightbox with keyboard controls:
+- `A` / `Left Arrow` for previous
+- `D` / `Right Arrow` for next
+- `Esc` to close
+- Server-side loader reads files directly from disk
+- Docker-ready for easy deployment
 
-## Getting Started
+## Tech Stack
 
-### Installation
+- React 19
+- React Router 7 (framework mode)
+- TypeScript
+- Vite
+- Node.js
 
-Install the dependencies:
+## Quick Start
+
+### 1. Install
 
 ```bash
 npm install
 ```
 
-### Development
+### 2. Add Your Photos
 
-Start the development server with HMR:
+Drop your image files into:
+
+```text
+public/photos/
+```
+
+Supported formats:
+
+- `.png`
+- `.jpg` / `.jpeg`
+- `.bmp`
+- `.gif`
+
+### 3. Run Dev Server
 
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+Open `http://localhost:5173`.
 
-## Building for Production
-
-Create a production build:
+## Scripts
 
 ```bash
-npm run build
+npm run dev       # Start development server
+npm run build     # Create production build
+npm run start     # Run built server from build/server/index.js
+npm run typecheck # Generate types + TypeScript check
 ```
 
-## Deployment
+## Project Structure
 
-### Docker Deployment
+```text
+app/
+	routes/
+		home.tsx      # Gallery page + file loader + lightbox
+public/
+	photos/         # Put your images here
+build/
+	client/         # Static build output
+	server/         # Server build output
+```
 
-To build and run using Docker:
+## Docker
+
+Build and run:
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+docker build -t bit-gallery .
+docker run --rm -p 3000:3000 bit-gallery
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+Then open `http://localhost:3000`.
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+## Notes
 
-### DIY Deployment
+- If `public/photos` does not exist, the app creates it automatically.
+- If no files are found, you will get a themed empty-state screen with upload instructions.
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+## Future Ideas
 
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+- Drag-and-drop upload flow
+- EXIF date sorting toggle
+- Favorite/star photos
+- Slideshow mode
+- Optional image optimization pipeline
 
 ---
 
-Built with ❤️ using React Router.
+Built for pixels, nostalgia, and camera roll archaeology.
