@@ -238,7 +238,7 @@ export default function Home() {
                     className="pico-photo-img"
                   />
                   <div className="pico-photo-overlay" aria-hidden="true">
-                    ▶
+                    ⤢
                   </div>
                 </div>
                 <div className="pico-photo-label">
