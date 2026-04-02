@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -31,6 +31,8 @@ export default function Home() {
 
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [blinkOn, setBlinkOn] = useState(true);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   useEffect(() => {
     let canceled = false;
@@ -127,6 +129,45 @@ export default function Home() {
       setSelectedIdx(null);
     }
   }, [selectedIdx, photos.length]);
+
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (selectedIdx === null || e.touches.length !== 1) return;
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+    },
+    [selectedIdx],
+  );
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (selectedIdx === null || e.changedTouches.length !== 1) return;
+
+      const startX = touchStartX.current;
+      const startY = touchStartY.current;
+      touchStartX.current = null;
+      touchStartY.current = null;
+
+      if (startX === null || startY === null) return;
+
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const deltaX = endX - startX;
+      const deltaY = endY - startY;
+
+      // Horizontal swipe only; ignore taps and mostly vertical gestures.
+      if (Math.abs(deltaX) < 40 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+
+      if (deltaX < 0) {
+        setSelectedIdx((i) =>
+          i !== null ? Math.min(i + 1, photos.length - 1) : null,
+        );
+      } else {
+        setSelectedIdx((i) => (i !== null ? Math.max(i - 1, 0) : null));
+      }
+    },
+    [selectedIdx, photos.length],
+  );
 
   const selected = selectedIdx !== null ? photos[selectedIdx] : null;
 
@@ -263,7 +304,11 @@ export default function Home() {
             </div>
 
             {/* Photo viewer */}
-            <div className="pico-window-body">
+            <div
+              className="pico-window-body"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               <button
                 className="pico-nav-btn"
                 onClick={() =>
@@ -276,13 +321,11 @@ export default function Home() {
               >
                 ◀
               </button>
-              <div className="pico-photo-viewer">
-                <img
-                  src={selected.src}
-                  alt={selected.name}
-                  className="pico-photo-viewer-img"
-                />
-              </div>
+              <img
+                src={selected.src}
+                alt={selected.name}
+                className="pico-photo-viewer-img"
+              />
               <button
                 className="pico-nav-btn"
                 onClick={() =>

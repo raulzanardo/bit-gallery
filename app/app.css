@@ -489,6 +489,7 @@ html, body {
   padding: 24px;
   flex: 1;
   overflow: hidden;
+  min-width: 0;
   min-height: 0;
 }
 
@@ -527,40 +528,40 @@ html, body {
   cursor: not-allowed;
 }
 
-.pico-photo-viewer {
+.pico-photo-viewer-img {
   flex: 1;
-  display: flex;
-  align-items: safe center;
-  justify-content: safe center;
-  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
   background: var(--p8-black);
   border: 2px solid var(--p8-dark-grey);
-  min-height: 0;
-  position: relative;
-  scrollbar-width: thin;
-  scrollbar-color: var(--p8-lavender) var(--p8-black);
-}
-
-.pico-photo-viewer::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.pico-photo-viewer::-webkit-scrollbar-track {
-  background: var(--p8-black);
-}
-.pico-photo-viewer::-webkit-scrollbar-thumb {
-  background: var(--p8-lavender);
-  border: 2px solid var(--p8-dark-blue);
-}
-
-.pico-photo-viewer-img {
-  /* 3× sensor (240px) = 720px; stored file is 480px (2×), so display at 1.5× stored */
-  width: 720px;
-  height: auto;
+  object-fit: contain;
+  object-position: center;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   display: block;
-  flex-shrink: 0;
+}
+
+@media (min-width: 761px) {
+  .pico-lightbox {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .pico-window {
+    width: 100vw;
+    height: 100dvh;
+    max-width: 100vw;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .pico-photo-viewer-img {
+    height: min(100%, calc(100dvh - clamp(120px, 16dvh, 220px)));
+  }
 }
 
 .pico-window-footer {
@@ -767,14 +768,11 @@ html, body {
   .pico-window-body {
     gap: 8px;
     padding: 10px;
+    touch-action: pan-y;
   }
 
   .pico-nav-btn {
-    width: 44px;
-    min-height: 0;
-    height: 60px;
-    font-size: 18px;
-    border-width: 1px;
+    display: none;
   }
 
   .pico-photo-viewer-img {
@@ -808,18 +806,11 @@ html, body {
   }
 
   .pico-window-body {
-    display: grid;
-    grid-template-columns: 36px 1fr 36px;
-    align-items: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 6px;
     padding: 8px;
-  }
-
-  .pico-nav-btn {
-    width: 36px;
-    height: auto;
-    min-height: 0;
-    font-size: 16px;
   }
 }
 
