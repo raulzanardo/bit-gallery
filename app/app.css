@@ -52,7 +52,8 @@ html, body {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
   width: 100vw;
   overflow: hidden;
   background: var(--p8-dark-blue);
@@ -419,7 +420,7 @@ html, body {
   flex-direction: column;
   max-width: 96vw;
   max-height: 94vh;
-  min-width: 640px;
+  min-width: 0;
   width: 100%;
 }
 
@@ -614,4 +615,211 @@ html, body {
 .pico-photo-card:nth-child(8)  { animation-delay: 0.16s; }
 .pico-photo-card:nth-child(9)  { animation-delay: 0.18s; }
 .pico-photo-card:nth-child(10) { animation-delay: 0.20s; }
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .pico-main {
+    padding: 20px;
+  }
+
+  .pico-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .pico-status-item {
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 760px) {
+  html,
+  body {
+    font-size: 14px;
+  }
+
+  .pico-app::before {
+    box-shadow: inset 0 0 0 2px var(--p8-dark-grey);
+  }
+
+  .pico-titlebar {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .pico-titlebar-logo {
+    font-size: 14px;
+  }
+
+  .pico-titlebar-title {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0 var(--p8-black);
+  }
+
+  .pico-cursor {
+    width: 10px;
+  }
+
+  .pico-toolbar {
+    padding: 10px 12px;
+  }
+
+  .pico-toolbar-label {
+    font-size: 10px;
+  }
+
+  .pico-main {
+    padding: 12px;
+  }
+
+  .pico-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .pico-photo-card {
+    gap: 8px;
+  }
+
+  .pico-photo-label {
+    font-size: 8px;
+    letter-spacing: 0;
+    padding: 0 2px;
+  }
+
+  .pico-empty {
+    min-height: 50vh;
+    gap: 18px;
+  }
+
+  .pico-empty-border {
+    width: 100%;
+    padding: 20px 14px;
+    gap: 16px;
+  }
+
+  .pico-empty-title {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .pico-empty-line,
+  .pico-empty-hint {
+    font-size: 9px;
+    line-height: 1.8;
+  }
+
+  .pico-rainbow {
+    gap: 4px;
+    font-size: 18px;
+  }
+
+  .pico-statusbar {
+    padding: 8px 10px;
+    gap: 4px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .pico-status-item {
+    font-size: 8px;
+    letter-spacing: 0;
+    padding: 0 8px;
+  }
+
+  .pico-lightbox {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+  }
+
+  .pico-window {
+    max-width: 100vw;
+    max-height: 100dvh;
+    height: 100dvh;
+    border-width: 0;
+    box-shadow: none;
+  }
+
+  .pico-window-titlebar {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .pico-wbtn {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .pico-window-title {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .pico-window-counter {
+    font-size: 9px;
+  }
+
+  .pico-window-body {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .pico-nav-btn {
+    width: 44px;
+    min-height: 0;
+    height: 60px;
+    font-size: 18px;
+    border-width: 1px;
+  }
+
+  .pico-photo-viewer-img {
+    width: min(100%, 620px);
+  }
+
+  .pico-window-footer {
+    padding: 8px 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pico-window-footer span {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .pico-titlebar-title {
+    font-size: 10px;
+  }
+
+  .pico-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pico-status-item:nth-child(3),
+  .pico-status-item:last-child {
+    display: none;
+  }
+
+  .pico-window-body {
+    display: grid;
+    grid-template-columns: 36px 1fr 36px;
+    align-items: stretch;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .pico-nav-btn {
+    width: 36px;
+    height: auto;
+    min-height: 0;
+    font-size: 16px;
+  }
+}
 
