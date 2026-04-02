@@ -40,6 +40,12 @@ Drop your image files into:
 public/photos/
 ```
 
+List visible files in:
+
+```text
+public/photos/photos.json
+```
+
 Supported formats:
 
 - `.png`
@@ -87,6 +93,34 @@ docker run --rm -p 3000:3000 bit-gallery
 ```
 
 Then open `http://localhost:3000`.
+
+## Deploy To GitHub Pages
+
+This project is configured to deploy automatically on push to `master` using GitHub Actions.
+
+One-time setup with GitHub CLI:
+
+```bash
+gh auth login
+gh repo edit --enable-pages
+```
+
+Then in GitHub:
+
+- Go to **Settings → Pages**
+- Set **Source** to **GitHub Actions**
+
+Deployment URL pattern:
+
+```text
+https://<your-username>.github.io/bit-gallery/
+```
+
+Workflow file:
+
+```text
+.github/workflows/deploy-pages.yml
+```
 
 ## Notes
 

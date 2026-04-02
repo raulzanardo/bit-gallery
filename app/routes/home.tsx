@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Route } from "./+types/home";
-import fs from "node:fs";
-import path from "node:path";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,27 +9,6 @@ export function meta({}: Route.MetaArgs) {
       content: "Pixel Camera Photo Gallery — PICO-8 Style",
     },
   ];
-}
-
-export async function loader() {
-  const photosDir = path.join(process.cwd(), "public", "photos");
-  try {
-    if (!fs.existsSync(photosDir)) {
-      fs.mkdirSync(photosDir, { recursive: true });
-    }
-    const files = fs.readdirSync(photosDir);
-    const photos = files
-      .filter((f) => /\.(png|jpg|jpeg|bmp|gif)$/i.test(f))
-      .sort((a, b) => {
-        const aNum = parseInt(a.match(/\d+/)?.[0] ?? "0");
-        const bNum = parseInt(b.match(/\d+/)?.[0] ?? "0");
-        return bNum - aNum;
-      })
-      .map((f) => ({ src: `/photos/${encodeURIComponent(f)}`, name: f }));
-    return { photos };
-  } catch {
-    return { photos: [] };
-  }
 }
 
 type Photo = { src: string; name: string };
@@ -48,11 +25,72 @@ function Rainbow({ chars }: { chars: string }) {
 }
 
 // ── Main component ─────────────────────────────────────────────────────────────
-export default function Home({ loaderData }: Route.ComponentProps) {
-  const { photos } = loaderData as { photos: Photo[] };
+export default function Home() {
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [blinkOn, setBlinkOn] = useState(true);
+
+  useEffect(() => {
+    let canceled = false;
+
+    const loadPhotos = async () => {
+      const photosJsonUrl = `${import.meta.env.BASE_URL}photos/photos.json`;
+
+      try {
+        const response = await fetch(photosJsonUrl, { cache: "no-store" });
+        if (!response.ok) {
+          if (!canceled) {
+            setPhotos([]);
+            setLoading(false);
+          }
+          return;
+        }
+
+        const payload = (await response.json()) as
+          | string[]
+          | { name: string }[]
+          | null;
+
+        const files = Array.isArray(payload)
+          ? payload
+              .map((entry) =>
+                typeof entry === "string" ? entry : (entry?.name ?? ""),
+              )
+              .filter(Boolean)
+          : [];
+
+        const nextPhotos = files
+          .filter((f) => /\.(png|jpg|jpeg|bmp|gif)$/i.test(f))
+          .sort((a, b) => {
+            const aNum = parseInt(a.match(/\d+/)?.[0] ?? "0");
+            const bNum = parseInt(b.match(/\d+/)?.[0] ?? "0");
+            return bNum - aNum;
+          })
+          .map((f) => ({
+            src: `${import.meta.env.BASE_URL}photos/${encodeURIComponent(f)}`,
+            name: f,
+          }));
+
+        if (!canceled) {
+          setPhotos(nextPhotos);
+          setLoading(false);
+        }
+      } catch {
+        if (!canceled) {
+          setPhotos([]);
+          setLoading(false);
+        }
+      }
+    };
+
+    loadPhotos();
+
+    return () => {
+      canceled = true;
+    };
+  }, []);
 
   // Blinking cursor
   useEffect(() => {
@@ -84,6 +122,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [handleKey]);
 
+  useEffect(() => {
+    if (selectedIdx !== null && selectedIdx > photos.length - 1) {
+      setSelectedIdx(null);
+    }
+  }, [selectedIdx, photos.length]);
+
   const selected = selectedIdx !== null ? photos[selectedIdx] : null;
 
   return (
@@ -104,7 +148,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       {/* ── Toolbar ────────────────────────────────────────────────────── */}
       <div className="pico-toolbar">
         <span className="pico-toolbar-label">
-          {photos.length} PHOTO{photos.length !== 1 ? "S" : ""}
+          {loading
+            ? "LOADING..."
+            : `${photos.length} PHOTO${photos.length !== 1 ? "S" : ""}`}
         </span>
       </div>
 
@@ -116,16 +162,18 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <div className="pico-empty-border">
               <div className="pico-empty-title">NO PHOTOS</div>
               <div className="pico-empty-line">
-                DROP YOUR PHOTOS INTO
+                LIST YOUR FILES IN
+                <br />
+                <span style={{ color: "var(--p8-yellow)" }}>
+                  /public/photos/photos.json
+                </span>
+              </div>
+              <div className="pico-empty-line">
+                THEN ADD IMAGES TO
                 <br />
                 <span style={{ color: "var(--p8-yellow)" }}>
                   /public/photos/
                 </span>
-              </div>
-              <div className="pico-empty-line">
-                COPY PNG FILES FROM THE SD CARD
-                <br />
-                AND RELOAD THIS PAGE
               </div>
               <Rainbow chars="░▒▓▒░▒▓▒" />
               <div className="pico-empty-hint">SUPPORTS: PNG JPG BMP GIF</div>
