@@ -3,6 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "photos:manifest": "node scripts/generate-photos-manifest.mjs",
+    "prebuild": "npm run photos:manifest",
+    "predev": "npm run photos:manifest",
+    "prestart": "npm run photos:manifest",
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
