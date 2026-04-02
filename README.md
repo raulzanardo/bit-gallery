@@ -4,6 +4,23 @@ Retro pixel photo gallery built with React Router 7.
 
 BIT GALLERY turns your folder of camera exports into a PICO-8 inspired gallery UI with a sharp grid, CRT-like status bars, and a keyboard-friendly lightbox.
 
+## Camera Used For These Photos
+
+Most sample photos in this gallery were captured with this project:
+
+- https://github.com/raulzanardo/lilygo-pixel-camera
+
+Camera project highlights:
+
+- Hardware: LilyGo T-Display S3 Pro (ESP32-S3)
+- Sensor: OV3660 camera module
+- Capture pipeline tuned for pixel-art style output
+- Live preview at 240x176 (HQVGA)
+- Photos saved as PNG files to microSD (with 2x upscale in camera firmware)
+- Real-time filters, palettes, and dithering effects
+
+If you want the same look, export images from that camera project into this repo under public/photos and list them in public/photos/photos.json.
+
 ## Why It Is Cool
 
 - Pixel-art inspired interface with game-console energy
@@ -13,7 +30,7 @@ BIT GALLERY turns your folder of camera exports into a PICO-8 inspired gallery U
 - `A` / `Left Arrow` for previous
 - `D` / `Right Arrow` for next
 - `Esc` to close
-- Server-side loader reads files directly from disk
+- Mobile swipe support in lightbox navigation
 - Docker-ready for easy deployment
 
 ## Tech Stack
@@ -60,6 +77,8 @@ npm run dev
 ```
 
 Open `http://localhost:5173`.
+
+If your local config uses a base path, open `http://localhost:5173/bit-gallery/`.
 
 ## Scripts
 
