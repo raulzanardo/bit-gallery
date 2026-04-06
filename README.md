@@ -1,5 +1,9 @@
 # BIT GALLERY
 
+![Gallery view](images/gallery.png)
+
+![Photo zoom](images/photozoom.png)
+
 Retro pixel photo gallery built with React Router 7.
 
 BIT GALLERY turns your folder of camera exports into a PICO-8 inspired gallery UI with a sharp grid, CRT-like status bars, and a keyboard-friendly lightbox.
